@@ -316,7 +316,7 @@ namespace XmlDocMarkdown.Core
 		}
 
 		private static string GetShortSignatureMarkdown(ShortSignature shortSignature, string path)
-			=> EscapeHtml($"{shortSignature.Prefix}[{shortSignature.Name}]({path}){shortSignature.Suffix}");
+			=> EscapeHtml($"{shortSignature.Prefix}[{shortSignature.Name}](../{path}/){shortSignature.Suffix}");
 
 		private static string EscapeHtml(string value)
 			=> value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("|", "&#x7C;");
@@ -592,11 +592,11 @@ namespace XmlDocMarkdown.Core
 					if (NamespacePages)
 					{
 						string namespacePath = GetPermalink(MakeRelative(path, parent));
-						writer.WriteLine("* " + $"namespace\u00A0[{GetNamespaceName(declaringType ?? typeInfo)}]({namespacePath}{extension})");
+						writer.WriteLine("* " + $"namespace\u00A0[{GetNamespaceName(declaringType ?? typeInfo)}](../{namespacePath}{extension}/)");
 
 						string assemblyName = (declaringType ?? typeInfo).Assembly.GetName().Name;
 						string assemblyPath = GetPermalink(MakeRelative(path, RootPageLocation));
-						writer.WriteLine("* " + $"assembly\u00A0[{assemblyName}]({assemblyPath})");
+						writer.WriteLine("* " + $"assembly\u00A0[{assemblyName}](../{assemblyPath}/)");
 					}
 					else
 					{
@@ -612,7 +612,7 @@ namespace XmlDocMarkdown.Core
 							if (!Uri.TryCreate(directoryPath, UriKind.Absolute, out _))
 								directoryPath = "../" + directoryPath;
 							string fileName = GetShortName(typeInfo) + ".cs";
-							writer.WriteLine($"* [{fileName}]({directoryPath}/{fileName})");
+							writer.WriteLine($"* [{fileName}](../{directoryPath}/{fileName}/)");
 						}
 					}
 
@@ -2074,7 +2074,7 @@ namespace XmlDocMarkdown.Core
 					path = MakeRelative(context.PageLocation, path);
 				}
 
-				text = $"[{text}]({path})";
+				text = $"[{text}](../{path}/)";
 			}
 			else if (linkUrl != null)
 			{
